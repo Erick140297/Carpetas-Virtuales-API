@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.router = void 0;
+const express_1 = require("express");
+const folder_controller_1 = require("../controllers/folder.controller");
+const router = (0, express_1.Router)();
+exports.router = router;
+router.get("/get-folder/:folderId", folder_controller_1.getFolder);
+router.post("/create-folder/:stationId", folder_controller_1.postFolder);
+router.post("/create-subfolder/:folderId", folder_controller_1.postSubFolder);
+router.put("/rename-folder/:folderId", folder_controller_1.putFolder);
+router.delete("/delete-folder/:folderId", folder_controller_1.deleteFolder);
