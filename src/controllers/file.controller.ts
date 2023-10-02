@@ -58,12 +58,17 @@ const postFiles = async (req: Request, res: Response) => {
   try {
     const uploadPromises = Object.keys(uploadedFiles).map(async (fileKey) => {
       const file = uploadedFiles[fileKey];
-      const key: string = file.name + "-" + uuidv4();
 
-      await uploadFile(file, key);
+      // Obtener la extensión del archivo
+      const fileExtension = file.name.split('.').pop() || '';
+
+      // Generar el nuevo nombre del archivo
+      const newFileName = `${file.name.substring(0, file.name.lastIndexOf('.'))}-${uuidv4().substring(0, 4)}.${fileExtension}`;
+
+      await uploadFile(file, newFileName);
       await fs.unlink(file.tempFilePath);
 
-      const response = await insertFile(folderId, file.name, key);
+      const response = await insertFile(folderId, file.name, newFileName);
       return response;
     });
 
@@ -73,6 +78,7 @@ const postFiles = async (req: Request, res: Response) => {
     handleHttp(res, "ERROR_POST_FILES", error);
   }
 };
+
 
 const putFile = async (req: Request, res: Response) => {
   try {

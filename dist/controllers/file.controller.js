@@ -58,10 +58,13 @@ const postFiles = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const uploadPromises = Object.keys(uploadedFiles).map((fileKey) => __awaiter(void 0, void 0, void 0, function* () {
             const file = uploadedFiles[fileKey];
-            const key = file.name + "-" + (0, uuid_1.v4)();
-            yield (0, s3_1.uploadFile)(file, key);
+            // Obtener la extensión del archivo
+            const fileExtension = file.name.split('.').pop() || '';
+            // Generar el nuevo nombre del archivo
+            const newFileName = `${file.name.substring(0, file.name.lastIndexOf('.'))}-${(0, uuid_1.v4)().substring(0, 4)}.${fileExtension}`;
+            yield (0, s3_1.uploadFile)(file, newFileName);
             yield fs_extra_1.default.unlink(file.tempFilePath);
-            const response = yield (0, file_service_1.insertFile)(folderId, file.name, key);
+            const response = yield (0, file_service_1.insertFile)(folderId, file.name, newFileName);
             return response;
         }));
         yield Promise.all(uploadPromises);
