@@ -54,6 +54,20 @@ const updateStatusFile = async (id: string, status: string) => {
   return fileFound;
 };
 
+const addObservationsFile = async (id: string, observations: string) => {
+  const fileFound = await fileModel.findByIdAndUpdate(
+    id,
+    { observations },
+    {
+      new: true,
+    }
+  );
+  if (!fileFound) {
+    throw new Error("File not found");
+  }
+  return fileFound;
+};
+
 const removeFile = async (fileId: string) => {
   const file = await fileModel.findByIdAndDelete(fileId);
   if (!file) {
@@ -63,7 +77,9 @@ const removeFile = async (fileId: string) => {
     const foldersContainingFile = await folderModel.find({ files: fileId });
     await Promise.all(
       foldersContainingFile.map(async (folder) => {
-        folder.files = folder.files.filter((file) => file.toString() !== fileId);
+        folder.files = folder.files.filter(
+          (file) => file.toString() !== fileId
+        );
         await folder.save();
       })
     );
@@ -71,6 +87,11 @@ const removeFile = async (fileId: string) => {
   return "File deleted successfully";
 };
 
-export { returnFile, insertFile, renameFile, updateStatusFile, removeFile };
-
-
+export {
+  returnFile,
+  insertFile,
+  renameFile,
+  updateStatusFile,
+  removeFile,
+  addObservationsFile,
+};

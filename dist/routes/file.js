@@ -15,4 +15,5 @@ router.post("/create-file/:folderId", (0, express_fileupload_1.default)(fileUplo
 router.post("/upload-files/:folderId", (0, express_fileupload_1.default)(fileUpload_config_1.default), file_controller_1.postFiles);
 router.put("/rename-file/:fileId", file_controller_1.putFile);
 router.put("/change-status/:fileId", file_controller_1.changeStatusFile);
+router.put("/add-observations/:fileId", file_controller_1.addObservations);
 router.delete("/delete-file/:fileId", file_controller_1.deleteFile);

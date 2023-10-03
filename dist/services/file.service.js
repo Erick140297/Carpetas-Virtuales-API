@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.removeFile = exports.updateStatusFile = exports.renameFile = exports.insertFile = exports.returnFile = void 0;
+exports.addObservationsFile = exports.removeFile = exports.updateStatusFile = exports.renameFile = exports.insertFile = exports.returnFile = void 0;
 const file_model_1 = __importDefault(require("../models/file.model"));
 const folder_model_1 = __importDefault(require("../models/folder.model"));
 const s3_1 = require("../libs/s3");
@@ -59,6 +59,16 @@ const updateStatusFile = (id, status) => __awaiter(void 0, void 0, void 0, funct
     return fileFound;
 });
 exports.updateStatusFile = updateStatusFile;
+const addObservationsFile = (id, observations) => __awaiter(void 0, void 0, void 0, function* () {
+    const fileFound = yield file_model_1.default.findByIdAndUpdate(id, { observations }, {
+        new: true,
+    });
+    if (!fileFound) {
+        throw new Error("File not found");
+    }
+    return fileFound;
+});
+exports.addObservationsFile = addObservationsFile;
 const removeFile = (fileId) => __awaiter(void 0, void 0, void 0, function* () {
     const file = yield file_model_1.default.findByIdAndDelete(fileId);
     if (!file) {

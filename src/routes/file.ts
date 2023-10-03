@@ -8,6 +8,7 @@ import {
   putFile,
   changeStatusFile,
   deleteFile,
+  addObservations,
 } from "../controllers/file.controller";
 
 const router = Router();
@@ -21,6 +22,8 @@ router.post("/upload-files/:folderId", fileUpload(config), postFiles);
 router.put("/rename-file/:fileId", putFile);
 
 router.put("/change-status/:fileId", changeStatusFile);
+
+router.put("/add-observations/:fileId", addObservations);
 
 router.delete("/delete-file/:fileId", deleteFile);
 

@@ -10,6 +10,7 @@ import {
   removeFile,
   renameFile,
   updateStatusFile,
+  addObservationsFile,
 } from "../services/file.service";
 
 const getFile = async (req: Request, res: Response) => {
@@ -60,10 +61,13 @@ const postFiles = async (req: Request, res: Response) => {
       const file = uploadedFiles[fileKey];
 
       // Obtener la extensión del archivo
-      const fileExtension = file.name.split('.').pop() || '';
+      const fileExtension = file.name.split(".").pop() || "";
 
       // Generar el nuevo nombre del archivo
-      const newFileName = `${file.name.substring(0, file.name.lastIndexOf('.'))}-${uuidv4().substring(0, 4)}.${fileExtension}`;
+      const newFileName = `${file.name.substring(
+        0,
+        file.name.lastIndexOf(".")
+      )}-${uuidv4().substring(0, 4)}.${fileExtension}`;
 
       await uploadFile(file, newFileName);
       await fs.unlink(file.tempFilePath);
@@ -78,7 +82,6 @@ const postFiles = async (req: Request, res: Response) => {
     handleHttp(res, "ERROR_POST_FILES", error);
   }
 };
-
 
 const putFile = async (req: Request, res: Response) => {
   try {
@@ -112,4 +115,23 @@ const deleteFile = async (req: Request, res: Response) => {
   }
 };
 
-export { getFile, postFile, postFiles, putFile, changeStatusFile, deleteFile };
+const addObservations = async (req: Request, res: Response) => {
+  try {
+    const { fileId } = req.params;
+    const { observations } = req.body;
+    const response = await addObservationsFile(fileId, observations);
+    res.status(200).send(response);
+  } catch (error) {
+    handleHttp(res, "ERROR_ADD_OBSERVATION_FILE", error);
+  }
+};
+
+export {
+  getFile,
+  postFile,
+  postFiles,
+  putFile,
+  changeStatusFile,
+  deleteFile,
+  addObservations,
+};
